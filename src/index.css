@@ -31,6 +31,11 @@ code {
   border: 2px solid pink;
 }
 
+.person-info.selected-person {
+  padding: 30px;
+  border: 2px solid red;
+}
+
 .firstNameLastName {
   padding: 0 0 10px;
   color: #333333;
@@ -49,4 +54,37 @@ code {
   color: #666666;
   font-size: 14px;
   line-height: 1.8em;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+
+.spinner {
+  top: 0;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(155,155,155,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999999999;
+}
+
+.spinner span {
+  font-size: 10rem;
+  animation: spin infinite 2s linear;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  margin: 2rem 0;
 }

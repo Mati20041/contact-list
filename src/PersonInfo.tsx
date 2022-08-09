@@ -1,14 +1,19 @@
-import React from "react";
+import clsx from "clsx";
+import React, {useCallback} from "react";
 
 interface Props {
     data: {
+        id: string;
         firstNameLastName: string;
         jobTitle: string;
         emailAddress: string;
     };
+    handleSelect: (id: string) => any;
+    selected?: boolean;
 }
 
-function PersonInfo({ data }: Props) {
+const PersonInfo = ({ data, handleSelect, selected }: Props) => {
+    const handleClick = useCallback(() => handleSelect(data.id), [data.id]);
   return (
     <div
       style={{
@@ -22,13 +27,14 @@ function PersonInfo({ data }: Props) {
         background: "#fff",
         cursor: "pointer",
       }}
-      className="person-info"
+      className={clsx("person-info", selected && "selected-person")}
+      onClick={handleClick}
     >
       <div className="firstNameLastName">{data.firstNameLastName}</div>
       <div className="jobTitle">{data.jobTitle}</div>
       <div className="emailAddress">{data.emailAddress}</div>
     </div>
   );
-}
+};
 
 export default PersonInfo;
