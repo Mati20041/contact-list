@@ -1,24 +1,42 @@
-import React from "react";
-import apiData from "./api";
+import React, {useMemo} from "react";
+import apiData, {PersonInfoDto} from "./api";
 import PersonInfo from "./PersonInfo";
+import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
 
-function App() {
-  const [data, setData] = React.useState([]);
-  const [selected, setSelected] = React.useState([]);
+const App = () => {
+    const [selected, setSelected] = React.useState([]);
 
-  //  TODO fetch contacts using apiData function, handle loading and error states
+    const {
+        data,
+        error,
+        isFetching,
+        isFetchingNextPage,
+        fetchNextPage
+    } = useInfiniteQuery<PersonInfoDto[], Error>(["PersonInfo"], apiData, {
+        getNextPageParam: () => null,
+    });
 
-  return (
-    <div className="App">
-      <div className="selected">Selected contacts: {selected.length}</div>
-      <div className="list">
-        {data.map((personInfo) => (
-          // @ts-ignore
-          <PersonInfo key={personInfo.id} data={personInfo} />
-        ))}
-      </div>
-    </div>
-  );
-}
+    const personInfos = useMemo(() => data?.pages?.flat() ?? [], [data?.pages])
+
+    if (isFetching || isFetchingNextPage) {
+    }
+
+    if (error) {
+        return <div>Error {error.message}</div>
+    }
+
+    return (
+        <div className="App">
+            <div className="selected">Selected contacts: {selected.length}</div>
+            <div className="list">
+                {personInfos.map((personInfo) => (
+                    <PersonInfo key={personInfo.id} data={personInfo}/>
+                ))}
+                <button onClick={ () => fetchNextPage()}>Fetch More</button>
+            </div>
+            {(isFetching || isFetchingNextPage) && <div className="spinner">Spinner</div>}
+        </div>
+    );
+};
 
 export default App;

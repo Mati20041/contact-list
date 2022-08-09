@@ -7,7 +7,14 @@ function delay(time: number): Promise<void> {
   return new Promise((resolve) => setTimeout(() => resolve(), time));
 }
 
-export default async function apiData() {
+export interface PersonInfoDto {
+  id: string,
+  jobTitle: string,
+  emailAddress: string,
+  firstNameLastName: string
+}
+
+export default async function apiData(): Promise<PersonInfoDto[]> {
   await delay(1000);
   if (Math.random() > 0.7) {
     throw new Error("Something went wrong");
